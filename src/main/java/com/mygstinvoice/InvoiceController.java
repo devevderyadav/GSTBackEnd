@@ -1,7 +1,17 @@
 package com.mygstinvoice;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicLong;
+
+
+
+
+
+
+
 
 
 
@@ -11,6 +21,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.catalina.connector.Response;
 import org.json.simple.JSONObject;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -88,6 +102,28 @@ public class InvoiceController {
     	
     	  return obj;
 				
+    }
+    
+    
+    @CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value="/downloadpdf", method=RequestMethod.GET)
+    public ResponseEntity<byte[]> getPDF() throws IOException {
+        // convert JSON to Employee 
+       /* Employee emp = convertSomehow(json);*/
+
+        // generate the file
+    	Path pdfPath = Paths.get("src/main/resources/results/Invoice.pdf");
+    	byte[] contents = Files.readAllBytes(pdfPath);
+    	
+    	 System.out.println("Pdf Path"+pdfPath);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("application/pdf"));
+        String filename = "Invoice.pdf";
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(contents, headers, HttpStatus.OK);
+        return response;
     }
 
     

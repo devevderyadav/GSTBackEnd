@@ -209,7 +209,7 @@ public class InvoicePdfCreater {
            
            
            @SuppressWarnings("deprecation")
-   		Table footertable = new Table(1);
+   		   Table footertable = new Table(1);
           /* footertable.setMarginTop(10);*/
            footertable.setMarginTop(115);
            // first row
@@ -225,7 +225,7 @@ public class InvoicePdfCreater {
               
            
            
-           
+       
            document.close();
     }
     
